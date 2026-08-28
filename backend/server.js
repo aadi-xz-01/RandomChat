@@ -19,7 +19,8 @@ const SESSION_SECRET = process.env.SESSION_SECRET || "";
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
 const MAX_BODY_BYTES = 16 * 1024;
 const ADMIN_ASSETS = path.join(__dirname, "admin");
-const PUBLIC_ASSETS = path.dirname(__dirname);
+const PUBLIC_ASSET_ROOTS = [__dirname, path.dirname(__dirname)].filter((value, index, array) => array.indexOf(value) === index);
+const PUBLIC_ASSETS = PUBLIC_ASSET_ROOTS[0] || __dirname;
 
 const settings = {
     minAge: 18,
@@ -206,12 +207,22 @@ function sendAsset(res, filename, contentType) {
 }
 
 function sendPublicAsset(res, filename, contentType) {
-    const filePath = path.resolve(PUBLIC_ASSETS, filename);
-    if (path.relative(PUBLIC_ASSETS, filePath).startsWith("..")) {
+    const filePath = PUBLIC_ASSET_ROOTS
+        .map(root => path.resolve(root, filename))
+        .find(candidate => fs.existsSync(candidate));
+
+    const resolvedFilePath = filePath || path.resolve(PUBLIC_ASSETS, filename);
+    const isAllowed = PUBLIC_ASSET_ROOTS.some(root => {
+        const relativePath = path.relative(root, resolvedFilePath);
+        return relativePath && !relativePath.startsWith("..") && !path.isAbsolute(relativePath);
+    });
+
+    if (!isAllowed) {
         sendJson(res, 404, { error: "Not found" });
         return;
     }
-    fs.readFile(filePath, (error, content) => {
+
+    fs.readFile(resolvedFilePath, (error, content) => {
         if (error) {
             sendJson(res, 404, { error: "Not found" });
             return;

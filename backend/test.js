@@ -1,8 +1,22 @@
 const assert = require("assert");
+const http = require("http");
 const WebSocket = require("ws");
 
 const url = process.env.TEST_WS_URL || "ws://127.0.0.1:3000";
 const timeoutMs = 5000;
+
+function httpGet(pathname) {
+    return new Promise((resolve, reject) => {
+        const req = http.get({ host: "127.0.0.1", port: 3000, path: pathname }, res => {
+            let body = "";
+            res.on("data", chunk => {
+                body += chunk.toString();
+            });
+            res.on("end", () => resolve({ statusCode: res.statusCode, headers: res.headers, body }));
+        });
+        req.on("error", reject);
+    });
+}
 
 function connect() {
     return new Promise((resolve, reject) => {
@@ -76,6 +90,18 @@ async function closeAll(clients) {
 async function run() {
     const clients = [];
     try {
+        const publicHome = await httpGet("/");
+        assert.strictEqual(publicHome.statusCode, 200);
+        assert.match(publicHome.body, /RandomChat|Meet Someone New/);
+
+        const publicScript = await httpGet("/script.js");
+        assert.strictEqual(publicScript.statusCode, 200);
+        assert.match(publicScript.body, /connectBackend|WebSocket/);
+
+        const publicStyles = await httpGet("/style.css");
+        assert.strictEqual(publicStyles.statusCode, 200);
+        assert.match(publicStyles.body, /RandomChat|chat-screen|message/);
+
         const invalid = await connect();
         clients.push(invalid);
         send(invalid, { type: "find", profile: { name: "Too Young", age: 17, bio: "" } });
