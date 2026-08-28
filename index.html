@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#1f684e">
+    <meta name="randomchat-backend" content="">
+    <meta name="description" content="RandomChat is a simple place to meet someone new and start a conversation.">
+    <title>RandomChat | Meet Someone New</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="topbar">
+        <a class="logo" href="#" aria-label="RandomChat home">
+            <span class="logo-mark" aria-hidden="true">R</span>
+            <span>RandomChat</span>
+        </a>
+        <button class="header-btn" id="settingsBtn" type="button">Settings</button>
+    </header>
+
+    <main class="app">
+        <div class="announcement-banner" id="announcementBanner" role="status" hidden></div>
+        <section class="screen active" id="homeScreen" aria-labelledby="welcomeTitle">
+            <div class="welcome-layout">
+                <div class="welcome-copy">
+                    <p class="eyebrow"><span aria-hidden="true">●</span> A little more human</p>
+                    <h1 id="welcomeTitle">Welcome to <span>RandomChat</span></h1>
+                    <p class="welcome-description">Meet new people. Start a conversation. Keep it simple.</p>
+                    <button class="primary-btn large-btn" id="startChatBtn" type="button">Get Started <span aria-hidden="true">-&gt;</span></button>
+                    <p class="privacy-note"><span aria-hidden="true">&#10003;</span> No account required. Just be kind.</p>
+                </div>
+                <div class="welcome-art" aria-hidden="true">
+                    <div class="orbit orbit-one"></div>
+                    <div class="orbit orbit-two"></div>
+                    <div class="chat-bubble bubble-one">hello!</div>
+                    <div class="chat-bubble bubble-two">namaste</div>
+                    <div class="chat-bubble bubble-three">good vibes</div>
+                    <div class="welcome-spark">+</div>
+                    <div class="welcome-monogram">R</div>
+                </div>
+            </div>
+            <footer class="site-footer">
+                <span>Proudly Made in India 🇮🇳</span>
+                <span>Developed by Aditya</span>
+            </footer>
+        </section>
+
+        <section class="screen" id="setupScreen" aria-labelledby="setupTitle">
+            <form class="setup-box" id="profileForm" novalidate>
+                <p class="eyebrow">Before we connect</p>
+                <h2 id="setupTitle">Set up your profile</h2>
+                <p class="form-intro">Choose how you would like to appear in this chat.</p>
+                <label for="profileName">Name</label>
+                <input type="text" id="profileName" maxlength="40" autocomplete="nickname" required>
+                <label for="profileAge">Age</label>
+                <input type="number" id="profileAge" min="18" max="120" inputmode="numeric" required>
+                <small class="field-hint">You must be 18 or older to use RandomChat.</small>
+                <label for="profileBio">Bio <span>(optional)</span></label>
+                <textarea id="profileBio" maxlength="160" rows="4" placeholder="A sentence about you, if you feel like it..."></textarea>
+                <p class="form-warning" id="profileWarning" role="alert" aria-live="polite"></p>
+                <button class="primary-btn" id="continueProfileBtn" type="submit">Start Random Chat <span aria-hidden="true">-&gt;</span></button>
+            </form>
+        </section>
+
+        <section class="screen" id="matchingScreen" aria-labelledby="matchingTitle">
+            <div class="matching-box">
+                <div class="loader" aria-hidden="true"><span></span></div>
+                <p class="eyebrow">Your next conversation is nearby</p>
+                <h2 id="matchingTitle">Finding someone...</h2>
+                <p id="matchingText">Looking for a random person to chat with...</p>
+                <button class="secondary-btn" id="cancelMatchBtn" type="button">Cancel</button>
+            </div>
+        </section>
+
+        <section class="screen chat-screen" id="chatScreen" aria-labelledby="partnerName">
+            <div class="chat-header">
+                <div class="user-status">
+                    <div class="avatar" id="partnerAvatar" aria-hidden="true">S</div>
+                    <div><strong id="partnerName">Stranger</strong><span class="online"><span aria-hidden="true">●</span> Connected</span></div>
+                </div>
+                <p class="partner-bio" id="partnerBio"></p>
+                <button class="next-btn" id="nextBtn" type="button">Next <span aria-hidden="true">-&gt;</span></button>
+            </div>
+            <div class="messages" id="messages" aria-live="polite"><div class="system-message">You are now chatting with a stranger.</div></div>
+            <div class="message-area">
+                <label class="sr-only" for="messageInput">Message</label>
+                <input type="text" id="messageInput" placeholder="Write a message..." autocomplete="off" maxlength="500" enterkeyhint="send">
+                <button class="emoji-btn" id="emojiBtn" type="button" aria-label="Add a smile">:)</button>
+                <button class="send-btn" id="sendBtn" type="button">Send</button>
+            </div>
+            <div class="chat-controls"><button class="control-btn danger" id="endChatBtn" type="button">End chat</button></div>
+        </section>
+    </main>
+
+    <footer class="app-footer">RandomChat <span aria-hidden="true">&middot;</span> Conversations without the ceremony</footer>
+
+    <div class="modal-overlay" id="settingsModal" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+            <div class="modal-header"><h2 id="settingsTitle">Settings</h2><button class="close-btn" id="closeSettingsBtn" type="button" aria-label="Close settings">&times;</button></div>
+            <div class="setting-item"><div><strong>Dark mode</strong><small>Use the dark interface</small></div><label class="switch"><span class="sr-only">Dark mode</span><input type="checkbox" id="darkModeToggle" checked><span class="slider"></span></label></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

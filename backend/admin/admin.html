@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>RandomChat Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+    <main class="admin-shell">
+        <section class="login-view" id="loginView" aria-labelledby="loginTitle">
+            <div class="login-mark">R</div>
+            <p class="eyebrow">Private owner access</p>
+            <h1 id="loginTitle">RandomChat Admin</h1>
+            <p class="login-copy">Manage the live service from one secure place.</p>
+            <form id="loginForm" class="login-form">
+                <label for="username">Username</label>
+                <input id="username" name="username" autocomplete="username" required>
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" required>
+                <p class="form-error" id="loginError" role="alert"></p>
+                <button class="button primary" type="submit">Sign in</button>
+            </form>
+        </section>
+
+        <section class="dashboard-view hidden" id="dashboardView">
+            <aside class="sidebar">
+                <a class="admin-brand" href="/admin"><span>R</span><strong>RandomChat</strong><small>Owner panel</small></a>
+                <nav class="nav-list" aria-label="Admin sections">
+                    <button class="nav-item active" data-view="dashboard">Dashboard</button>
+                    <button class="nav-item" data-view="users">Users</button>
+                    <button class="nav-item" data-view="reports">Reports</button>
+                    <button class="nav-item" data-view="bans">Bans</button>
+                    <button class="nav-item" data-view="announcements">Announcements</button>
+                    <button class="nav-item" data-view="settings">Settings</button>
+                </nav>
+                <button class="logout-button" id="logoutButton">Log out</button>
+            </aside>
+
+            <div class="content">
+                <header class="content-header">
+                    <div><p class="eyebrow">Live service</p><h1 id="viewTitle">Dashboard</h1></div>
+                    <span class="status-pill"><i></i> Server online</span>
+                </header>
+                <p class="page-error" id="pageError" role="alert"></p>
+
+                <section class="view active" id="view-dashboard">
+                    <div class="stat-grid">
+                        <article class="stat-card"><span>Online users</span><strong id="statOnline">0</strong><small>Connected right now</small></article>
+                        <article class="stat-card"><span>Active chats</span><strong id="statChats">0</strong><small>Live conversations</small></article>
+                        <article class="stat-card"><span>Waiting users</span><strong id="statWaiting">0</strong><small>Looking for someone</small></article>
+                        <article class="stat-card"><span>Connections</span><strong id="statConnections">0</strong><small>Since last restart</small></article>
+                    </div>
+                    <div class="dashboard-grid">
+                        <article class="panel"><div class="panel-heading"><div><p class="eyebrow">Moderation</p><h2>Attention</h2></div></div><div class="attention-row"><span>Open reports</span><strong id="statReports">0</strong></div><div class="attention-row"><span>Active bans</span><strong id="statBans">0</strong></div></article>
+                        <article class="panel"><div class="panel-heading"><div><p class="eyebrow">Current configuration</p><h2>Service status</h2></div></div><div class="attention-row"><span>Minimum age</span><strong id="settingAge">18+</strong></div><div class="attention-row"><span>Bio limit</span><strong id="settingBio">160</strong></div><div class="attention-row"><span>Mode</span><strong id="settingMode">Online</strong></div></article>
+                    </div>
+                    <p class="data-note">All dashboard data is live in-memory state. Historical data is not available until a database is added.</p>
+                </section>
+
+                <section class="view" id="view-users"><div class="section-heading"><div><p class="eyebrow">Live sessions</p><h2>Connected users</h2></div><button class="button secondary refresh-button">Refresh</button></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Profile</th><th>Status</th><th>Connected</th><th>Action</th></tr></thead><tbody id="usersTable"></tbody></table></div></section>
+                <section class="view" id="view-reports"><div class="section-heading"><div><p class="eyebrow">Moderation queue</p><h2>Reports</h2></div><button class="button secondary refresh-button">Refresh</button></div><div class="table-wrap"><table><thead><tr><th>Report</th><th>Reported user</th><th>Reason</th><th>When</th><th>Status</th><th>Action</th></tr></thead><tbody id="reportsTable"></tbody></table></div></section>
+                <section class="view" id="view-bans"><div class="section-heading"><div><p class="eyebrow">Current process only</p><h2>Bans</h2></div><button class="button secondary refresh-button">Refresh</button></div><p class="section-note">Bans are enforced for the current server process and are cleared on restart because no database is configured.</p><div class="table-wrap"><table><thead><tr><th>User ID</th><th>Type</th><th>Created</th><th>Expires</th><th>Action</th></tr></thead><tbody id="bansTable"></tbody></table></div></section>
+                <section class="view" id="view-announcements"><div class="section-heading"><div><p class="eyebrow">Public message</p><h2>Announcement</h2></div></div><form class="panel form-panel" id="announcementForm"><label for="announcement">Message <span>optional</span></label><textarea id="announcement" maxlength="240" rows="5" placeholder="Share a short message with visitors..."></textarea><div class="form-actions"><button class="button secondary" type="button" id="clearAnnouncement">Disable announcement</button><button class="button primary" type="submit">Save announcement</button></div><p class="save-message" id="announcementMessage"></p></form></section>
+                <section class="view" id="view-settings"><div class="section-heading"><div><p class="eyebrow">Service controls</p><h2>Settings</h2></div></div><form class="panel form-panel" id="settingsForm"><div class="setting-line"><div><strong>Maintenance mode</strong><small>Reject new matches while keeping the server online.</small></div><label class="switch"><input id="maintenance" type="checkbox"><span></span></label></div><p class="section-note">Minimum age is fixed at 18 and the maximum bio length is 160 characters in this stage.</p><div class="form-actions"><button class="button primary" type="submit">Save settings</button></div><p class="save-message" id="settingsMessage"></p></form></section>
+            </div>
+        </section>
+    </main>
+    <script src="/admin/admin.js"></script>
+</body>
+</html>
